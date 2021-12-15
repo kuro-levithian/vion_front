@@ -1,0 +1,122 @@
+@import url('https://fonts.googleapis.com/css2?family=Raleway&display=swap');
+
+* {
+    padding: 0px;
+    margin: 0px;
+    box-sizing: border-box;
+    font-family: 'Raleway', sans-serif;
+}
+
+/* body {
+    display: flex;
+    min-height: 300px;
+    justify-content: center;
+    align-items: center;
+}
+
+.signup {
+    position: absolute;
+    height: 51px;
+    text-align: center;
+    font-family: 'Raleway', sans-serif;
+    margin: auto;
+    vertical-align: middle;
+} */
+
+.sign-up {
+    text-align: center;
+    padding: 20px;
+}
+
+.form-container {
+    width: 480px;
+    background-color: white;
+    margin: 10%;
+    margin-left: auto;
+    margin-right: auto;
+    box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
+    padding: 10px;
+    border-radius: 10px;
+}
+
+.register-form {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    padding: 10px;
+}
+
+.success-message {
+    font-family: 'Raleway', sans-serif;
+    background-color: #3f89f8;
+    font-size: 17px;
+    text-align: center;
+    padding: 25px;
+    margin: 0 0 10px 0;
+    color: white;
+    display: block;
+}
+
+.form-field {
+    margin: 10px 0 10px 0;
+    padding: 10px;
+    font-size: 16px;
+    border-radius: 7px;
+    font-family: 'Raleway', sans-serif;
+}
+
+.btn-container {
+    display: flex;
+    justify-content: center;
+}
+
+.firstlastname {
+    display: flex;
+}
+
+.addcity {
+    display: flex;
+}
+
+.ward-district {
+    display: flex;
+}
+
+span {
+    font-family: 'Raleway', sans-serif;
+    font-size: 14px;
+    color: red;
+    margin-bottom: 25x;
+    margin: auto;
+}
+
+input {
+    background: #f2f2f2;
+}
+
+.error {
+    border-style: solid;
+    border: 2px solid #ffa4a4;
+}
+
+button {
+    /* background: #274e13;
+    color: white;
+    cursor: pointer;
+    width: 100px;
+    margin: auto;
+    display: block;
+    border-radius: 10px;
+    text-align: center; */
+}
+
+button:disabled {
+    cursor: default;
+}
+
+.has-account {
+    display: flex;
+    text-align: center;
+    justify-content: center;
+    margin-top: 10px;
+}
