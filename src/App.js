@@ -9,9 +9,9 @@ import {
   Link
 } from "react-router-dom";
 import ProductList from './page/ProductList';
-import LoginForm from './page/SignInForm/SignInForm'
-import SignUpForm from './page/SignUpForm/SignUpForm'
-
+import SignIn from './page/SignIn'
+import SignUp from './page/SignUp'
+import ForgotPassword from './page/ForgotPassword'
 
 
 
@@ -23,8 +23,10 @@ function App() {
         <Route path="/product" element = {<ProductList/>}/>
         <Route path="/cart" element = {<Cart/>}/>
         <Route path="/product_details" element = {<Product_Details/>}/>
-        <Route path="/register" element={<SignUpForm/>}/>
-        <Route path="/login" element={<LoginForm/>}/>
+        <Route path="/signup" element={<SignUp/>}/>
+        <Route path="/signin" element={<SignIn/>}/>
+        <Route path="/forgot" element={<ForgotPassword/>}/>
+
       </Routes>
     </BrowserRouter>
   );

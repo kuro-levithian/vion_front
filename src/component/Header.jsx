@@ -48,25 +48,25 @@ const Header = () => {
         <div className="header-1">
           <a href="#home" className="logo"> <img src={logo} alt="" /></a>
           <form className="search-box-container" action>
-            <input type="search" id="search-box" placeholder="search here" />
+            <input type="search" id="search-box" placeholder="Tìm kiếm" />
             <label htmlFor="search-box"/>
           </form>
         </div>
         <div className="header-2">
           <div id="menu-bar" className="fas fa-bars" />
           <nav className="navbar shop-nav">
-            <a href="/" className="active">Home</a>
-            <a href="#">about us</a>
-            <a href="#">fruits and vegetables</a>
-            <a href="/product">shop</a>
-            <a href="#">blogs</a>
-            <a href="#">FAQ</a>
-            <a href="#">contact</a>
+            <a href="/" className="active">Trang Chủ</a>
+            <a href="#">Thông tin</a>
+            <a href="#">Rau củ</a>
+            <a href="/product">Cửa hàng</a>
+            <a href="#">Blogs</a>
+            <a href="#">Câu hỏi</a>
+            <a href="#">Liên hệ</a>
           </nav>
           <div className="icons">
-            <a href="/cart"><Carts/>Your Cart</a>
-            <a href="/login"><SignUp/>Sign In</a>
-            <a href="/register"><AccountCircle/>Sign Up</a>
+            <a href="/cart"><Carts/>Giỏ hàng</a>
+            <a href="/signin"><SignUp/>Đăng nhập</a>
+            <a href="/signup"><AccountCircle/>Đăng kí</a>
           </div>
         </div>
       </header>

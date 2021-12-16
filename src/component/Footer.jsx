@@ -109,16 +109,9 @@ const Footer = () => {
                 <a href="#">Copyright</a>
               </div>
             </div>
-            <div className="box">
-              <h2>Download App</h2>
-              <div className="image">
-                <img src={logo_iphone} alt="" />
-                <img src={logo_android} alt="" />
-              </div>
-            </div>
           </div>
         </section>
-        <div className="credit"> Copyright 2021 <span> Vion mart </span> all reserved</div>
+        <div className="credit"> Copyright 2021. All right reserved.</div>
       </div>
     )
 }
