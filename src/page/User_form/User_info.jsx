@@ -1,54 +1,38 @@
-import React, {SyntheticEvent, useState } from 'react';
+import React, { useState } from 'react';
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import styled, { css } from "styled-components";
-import "./SignUpForm.css";
-import {Navigate} from 'react-router-dom';
 
 const schema = yup.object().shape({
     username: yup
         .string()
-        .required("Vui lòng nhập tên đăng nhập")
+        .required("Vui lòng nhập họ tên người nhận")
         .max(20, "Username tối đa 20 ký tự"),
-    password: yup
-        .string()
-        .required("Vui lòng nhập mật khẩu")
-        .min(6, "Mật khẩu tối thiểu 6 ký tự"),
-    confirm_password:yup
-        .string()
-        .required("Vui lòng nhập mật khẩu")
-        .min(6, "Mật khẩu tối thiểu 6 ký tự"),
-    email: yup
-        .string()
-        .required("Vui lòng nhập email"),
-    lastname: yup
-        .string()
-        .required("Vui lòng nhập họ"),      
-    firstname: yup
-        .string()
-        .required("Vui lòng nhập tên"),    
     phone: yup
         .string()
         .required("Vui lòng nhập số điện thoại")
         .matches(
             /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/,
             "Số điện thoại không hợp lệ"),
-    address: yup
+    address_1:yup
         .string()
-        .required("Vui lòng nhập địa chỉ"),
-            
-    city: yup
+        .required("Vui lòng nhập địa chỉ nhận hàng"),
+    address_2:yup
         .string()
-        .required("Vui lòng nhập thành phố"),
-        
-    ward: yup
+        .required("Vui lòng nhập địa chỉ nhận hàng"),
+    address_3:yup
         .string()
-        .required("Vui lòng nhập phường"),
-        
-    district: yup
+        .required("Vui lòng nhập địa chỉ nhận hàng"),
+    address_4:yup
         .string()
-        .required("Vui lòng nhập quận, huyện"),
+        .required("Vui lòng nhập địa chỉ nhận hàng"),
+    date:yup
+        .string()
+        .required("Vui lòng nhập ngày giao hàng"),
+    time:yup
+        .string()
+        .required("Vui lòng nhập thời gian giao hàng"), 
 });
 
 
@@ -91,8 +75,9 @@ display: block;
 `
 
 const CardBody = styled.div`
-  padding-right: 32px;
-  padding-left: 32px;
+  padding: 32px 32px 32px 40px;
+  background-color:white;
+
 `;
 
 const CardFieldset = styled.fieldset`
@@ -123,6 +108,8 @@ justify-content: space-evenly;
 
 const CardInput = styled.input`
   padding: 7px 0;
+  margin-top: 10px;
+  margin-bottom: 10px;
   width: 100%;
   font-family: inherit;
   font-size: 14px;
@@ -141,6 +128,25 @@ const CardInput = styled.input`
   }
 `;
 
+const CardNote = styled.textarea`
+  padding: 7px 0;
+  width: 100%;
+  font-family: inherit;
+  font-size: 14px;
+  border-top: 0;
+  border-right: 0;
+  border-bottom: 1px solid #ddd;
+  border-left: 0;
+  transition: border-bottom-color 0.25s ease-in;
+  background-color: #fff;
+  max-height: 150px;
+  padding-left: 10px;
+  border-radius: 15px;
+  &:focus {
+    border-bottom-color: #FFDE59;
+    outline: 0;
+  }
+`;
 
 
 
@@ -197,7 +203,7 @@ color: #ffa4a4
 
 
 
-export default function SignUpForm() {
+const User_info = () =>{
   const {
     register,
     handleSubmit,
@@ -211,89 +217,61 @@ export default function SignUpForm() {
     console.log(data);
   }
 
-  const [gender, setGender] = useState();
-  const [name, setName] = useState();
-  const [phone, setPhone] = useState();
-  const [address, setAddress] = useState();
-  const [email, setEmail] = useState();
-  const [password, setPassword] = useState();
-  const [confirm_password, setConfirm_password] = useState();
-  const [redirect,setRedirect] = useState();
-
-  const Submit = async (e: SyntheticEvent) => {
-    e.preventDefault();
-
-    await fetch('http://localhost:3000/signup', {
-      method: 'POST',
-      headers: { 'Content-type': 'application/json' },
-      body: JSON.stringify({
-        gender, name, phone, address, email, password, confirm_password
-      })
-    });
-
-    setRedirect(true);
-
-  }
-
-  if(redirect){
-    return <Navigate to="/signup"/>
-  }
-
   return (
     <CardWrapper>
         <CardHeader>
-            <CardHeading>Đăng kí</CardHeading>
+            <CardHeading>Thông tin giao hàng</CardHeading>
         </CardHeader>
-        <CardLogUpForm onSubmit={Submit}>
+        <CardLogUpForm onSubmit={handleSubmit(registerSubmit)}>
             {submitted ? <SuccessMessage>Bạn đã đăng ký thành công. Trở về trang chủ.</SuccessMessage> : null}
         <CardBody>
             <CardFieldset>
-                <CardRadio id="sex" placeholder="Anh" type="radio" name="gender"{...register("gender")} onChange={(e) => setGender(e.target.value)}/>Anh
-                <CardRadio id="sex" placeholder="Chị" type="radio" name="gender"{...register("gender")} onChange={(e) => setGender(e.target.value)}/>Chị
+                <CardRadio id="sex" placeholder="Anh" type="radio" name="gender"{...register("gender")}/>Anh
+                <CardRadio id="sex" placeholder="Chị" type="radio" name="gender"{...register("gender")}/>Chị
             </CardFieldset>
 
             <CardFieldset>
-                <CardInput id="username" placeholder="Tên đăng nhập" type="text" name="username"{...register("username")} onChange={(e) => setName(e.target.value)}/>
+                <label htmlFor>Tên người nhận</label>
+                <CardInput id="name" placeholder="Họ và Tên" type="text" name="name"{...register("name")}/>
                 {errors.username && <Error>{errors.username?.message}</Error>}
             </CardFieldset>
 
             <CardFieldset>
-                <CardInput id="phone" placeholder="Số điện thoại" type="text" name="phone"{...register("phone")} onChange={(e) => setPhone(e.target.value)}/>
+                <label>Số điện thoại người nhận</label>
+                <CardInput id="phone" placeholder="Số điện thoại" type="text" name="phone"{...register("phone")}/>
                 {errors.phone && <Error>{errors.phone?.message}</Error>}
             </CardFieldset>
 
             <CardFieldset>
-                <CardInput id="address" placeholder="Địa chỉ" type="text" name="address"{...register("address")} onChange={(e) => setAddress(e.target.value)}/>
-                {errors.address && <Error>{errors.address?.message}</Error>}
-
+                <label>Địa chỉ nhận hàng</label>
+                <CardInput id="address" placeholder="Số nhà" type="text" name="address"{...register("address_1")}/>
+                {errors.address_1 && <Error>{errors.address_1?.message}</Error>}
+                <CardInput id="address" placeholder="Phường" type="text" name="address"{...register("address_2")}/>
+                {errors.address_2 && <Error>{errors.address_2?.message}</Error>}
+                <CardInput id="address" placeholder="Quận, Huyện" type="text" name="address"{...register("address_3")}/>
+                {errors.address_3 && <Error>{errors.address_3?.message}</Error>}
+                <CardInput id="address" placeholder="Thành Phố" type="text" name="address"{...register("address_4")}/>
+                {errors.address_4 && <Error>{errors.address_4?.message}</Error>}
             </CardFieldset>
 
             <CardFieldset>
-                <CardInput id="email" placeholder="Email" type="text" name="email"{...register("email")} onChange={(e) => setEmail(e.target.value)}/>
-                {errors.email && <Error>{errors.email?.message}</Error>}
+                <label>Ngày nhận hàng</label>
+                <CardInput id="date" placeholder="dd/mm/yy" type="date" name="date"{...register("date")}/>
+                {errors.date && <Error>{errors.date?.message}</Error>}
             </CardFieldset>
 
             <CardFieldset>
-                <CardInput id="password" placeholder="Mật khẩu" type="password" name="password"{...register("password")} onChange={(e) => setPassword(e.target.value)}/>
-                {errors.password && <Error>{errors.password?.message}</Error>}
+                <label>Thời gian nhận hàng</label>
+                <CardInput id="time" placeholder="Thời gian nhận hàng" type="time" name="time"{...register("time")} />
+                {errors.time && <Error>{errors.time?.message}</Error>}
             </CardFieldset>
 
             <CardFieldset>
-                <CardInput id="password" placeholder="Nhập lại mật khẩu" type="password" name="confirm_password"{...register("confirm_password")} onChange={(e) => setConfirm_password(e.target.value)}/>
-                {errors.password && <Error>{errors.password?.message}</Error>}
+                <CardNote id="note" placeholder="Ghi chú" type="text" name="note" rows={5} cols={30}  />
             </CardFieldset>
 
             <CardFieldset>
-                <CardButton type="submit" >Đăng kí </CardButton>
-            </CardFieldset>
-
-            <CardFieldset>
-                <CardMenu>
-                    <li><CardDoc> hoặc </CardDoc></li>
-                    <li>
-                        <a href="/signin"><CardLink>Đăng nhập nếu đã có tài khoản</CardLink></a>
-                    </li>
-                </CardMenu>
+                  <a href="/review"><CardButton type="submit" >Tiếp tục</CardButton></a>
             </CardFieldset>
         </CardBody>
         </CardLogUpForm>
@@ -301,3 +279,5 @@ export default function SignUpForm() {
     </CardWrapper>
     );
 }
+
+export default User_info

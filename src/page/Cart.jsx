@@ -1,4 +1,4 @@
-import React from 'react'
+import React,{useState} from 'react'
 import styled from 'styled-components'
 import Footer from '../component/Footer'
 import Header from '../component/Header'
@@ -6,6 +6,10 @@ import logo1 from '../images/p-1.webp'
 import logo2 from '../images/p-2.webp'
 import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
+import {Modal} from 'react-bootstrap';
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup";
 
 const Container = styled.div`
 `
@@ -136,8 +140,86 @@ const Button = styled.button`
   color: white;
   font-weight: 600;
 `;
+const CardLogin = styled.form`
+display: flex;
+flex-direction: column;
+justify-content: space-evenly;
+padding: 10px;
+`;
 
-const Cart = () => {
+const Input = styled.input`
+padding: 7px 0;
+width: 100%;
+font-family: inherit;
+font-size: 14px;
+border-top: 0;
+border-right: 0;
+border-bottom: 1px solid #ddd;
+border-left: 0;
+transition: border-bottom-color 0.25s ease-in;
+background-color: #fff;
+max-height: 50px;
+padding-left: 10px;
+border-radius: 35px;
+&:focus {
+  border-bottom-color: #FFDE59;
+  outline: 0;
+}
+`;
+
+const schema = yup.object().shape({
+  phone: yup
+    .string()
+    .required("Vui lòng nhập số điện thoại tại đây")
+    .max(10, "Số điện thoại tối đa 10 ký tự")
+    .min(10, "Số điện thoại tối thiểu 10 ký tự")
+    .matches(
+      /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/,
+      "Số điện thoại không hợp lệ"),
+});
+
+function MyVerticallyCenteredModal(props) {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors }
+  } = useForm({ resolver: yupResolver(schema) });
+
+  const onLoginSubmit = (data) => {
+    console.log(data);
+  };
+
+  return (
+    <Modal
+      {...props}
+      size="lg"
+      aria-labelledby="contained-modal-title-vcenter"
+      centered
+    >
+      <Modal.Header closeButton>
+        <Modal.Title id="contained-modal-title-vcenter">
+        Có lẽ quý khách chưa đăng kí để trở thành thành viên của chúng tôi
+        </Modal.Title>
+      </Modal.Header>
+      <Modal.Body>
+        <CardLogin onSubmit={handleSubmit(onLoginSubmit)}>
+          <h5>Vui lòng cung cấp số điện thoại người nhận</h5>
+          <Input id="phone" placeholder="Số điện thoại" type="text" name="phone"{...register("phone")}/>
+          {errors.phone && <span>{errors.phone?.message}</span>}
+        </CardLogin>
+      </Modal.Body>
+      <Modal.Footer>
+        <Button type='submit'>Tiếp tục</Button>
+      </Modal.Footer>
+    </Modal>
+  );
+}
+
+const Cart = (props) => {
+
+    const [modalShow, setModalShow]=useState(false);
+    const {cartItems,onAdd} = props;
+
     return(
         <Container>
             <Header/>
@@ -146,7 +228,7 @@ const Cart = () => {
                 <Top>
                     <TopButton>CONTINUE SHOPPING</TopButton>
                     <TopTexts>
-                        <Text>Shopping Bag(2)</Text>
+                        <Text>Shopping Bag()</Text>
                         <Text>Your Wistlist(0)</Text>
                     </TopTexts>
                     <TopButton type='filled'>CHECKOUT NOW</TopButton>
@@ -154,42 +236,19 @@ const Cart = () => {
 
                 <Bottom>
                     <Info>
-                        <Product>
-                            <ProductDetail>
-                                <Image src={logo1}/>
-                                <Details>
-                                    <ProductName> <b>Product:</b> Organic Sweets Corn</ProductName>
-                                    <ProductId>1</ProductId>
-                                </Details>
-                            </ProductDetail>
-                            <PriceDetail>
-                                <ProductAmountContainer>
-                                    <AddIcon/>
-                                    <ProductAmount>2</ProductAmount>
-                                    <RemoveIcon/>
-                                </ProductAmountContainer>
-                                <ProductPrice>$14</ProductPrice>
-                            </PriceDetail>
-                        </Product>
-                        <Hr/>
-                        <Product>
-                            <ProductDetail>
-                                <Image src={logo2}/>
-                                <Details>
-                                    <ProductName> <b>Product:</b> gold creamer potatoes</ProductName>
-                                    <ProductId>1</ProductId>
-                                </Details>
-                            </ProductDetail>
-                            <PriceDetail>
-                                <ProductAmountContainer>
-                                    <AddIcon/>
-                                    <ProductAmount>2</ProductAmount>
-                                    <RemoveIcon/>
-                                </ProductAmountContainer>
-                                <ProductPrice>$14</ProductPrice>
-                            </PriceDetail>
-                        </Product>
+                      {cartItems.length===0 && <Info>Your Cart Is Empty</Info>}
                     </Info>
+                    {cartItems.map((item)=>(
+                      <Info key={item.id}>
+                        <ProductName>{item.title}</ProductName>
+                        <div>
+                          <button onClick={()=>onAdd(item)} className='add'>+</button>
+                        </div>
+                        <div>
+                          {item.quantity} x ${item.main_price.toFixed(2)}
+                        </div>
+                      </Info>
+                    ))}
                     <Summary>
                         <SummaryTitle>ORDER SUMMARY</SummaryTitle>
                         <SummaryItem>
@@ -210,7 +269,8 @@ const Cart = () => {
                             <SummaryItemText>Total</SummaryItemText>
                             <SummaryItemPrice>$ 80</SummaryItemPrice>
                         </SummaryItem>
-                        <Button>CHECKOUT NOW</Button>
+                        <Button onClick={() => setModalShow(true)}>CHECKOUT NOW</Button>
+                        <MyVerticallyCenteredModal show={modalShow} onHide={()=>setModalShow(false)}/>
                     </Summary>
                 </Bottom>
             </Wrapper>

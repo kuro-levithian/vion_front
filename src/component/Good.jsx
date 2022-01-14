@@ -1,31 +1,33 @@
 import React from 'react'
-import '../App.css';
-import '../data';
-import { Product } from '../data'
+import {Link} from 'react-router-dom';
+import styled from 'styled-components';
+import { useState } from 'react';
+import { addCart } from '../data';
+import { addProduct } from '../page/redux/cartRedux';
+import { useDispatch } from 'react-redux';
+
+const StyledLink = styled(Link)`
+    text-decoration: none;
+    font-weight: bold;
+
+    &:hover, &:active {
+        text-decoration:underline;
+    }
+`;
 
 
-const Good = () => {
+const Good = (props) => {
+    const {Product,onAdd} = props;
     return (
-        <section className="product">
-          <div className="heading">
-            <h2>Top savers to day <span>20% off</span></h2>
-            <a href="#">view all</a>
-          </div>
-          <div className="box-container">
-          {Product.map((item)=>(
-            <div className="box">
+            <div className="box" key={Product.id}>
                 <span className="discount">-33%</span>
                 <div className="corner-box"><span /></div>
-                <a href="/product_details"><img src={item.image}/></a>
-                <h3>{item.title}</h3>
+                <StyledLink to={`/product/${Product.id}`}><img src={Product.image}/></StyledLink>
+                <h3><StyledLink to={`/product/${Product.id}`}>{Product.title}</StyledLink></h3>
                 <p>instock - <span>1</span>kg</p>
-                <div className="price"><span>{item.main_price}</span>{item.sub_price}</div>
-                <button type="button" className="btn">Add to cart</button>
+                <div className="price"><span>{Product.main_price}</span>{Product.sub_price}</div>
+                <button type="button" className="btn" onClick={()=>onAdd(Product)}>Add to cart</button>
             </div>
-          ))}
-          </div>
-        </section>
     )
 }
-
 export default Good

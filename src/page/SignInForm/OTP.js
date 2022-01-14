@@ -1,21 +1,15 @@
-import { SyntheticEvent, useState } from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import React from "react";
 import styled from "styled-components";
-import {Navigate} from 'react-router-dom';
+
 
 const schema = yup.object().shape({
-  username: yup
+  otp: yup
     .string()
-    .required("Vui lòng nhập username")
-    .max(20, "Username tối đa 20 ký tự")
-    .min(6, "Username tối thiểu 6 ký tự"),
-  password: yup
-    .string()
-    .required("Vui lòng nhập mật khẩu")
-    .min(6, "Mật khẩu tối thiểu 6 ký tự")
+    .required("Vui lòng nhập OTP")
+    .min(6, "Mã OTP tối thiểu 6 ký tự")
 });
 
 const CardWrapper = styled.div`
@@ -89,10 +83,6 @@ const CardInput = styled.input`
   }
 `;
 
-
-
-
-
 const CardButton = styled.button`
   display: block;
   width: 100%;
@@ -137,84 +127,57 @@ const CardDoc = styled.h1`
   font-size: 10px;
   text-decoration: none;
   color: #aaa;
-`
+`;
 
 const Error = styled.span`
 color: #ffa4a4
 `
 
 
-export default function LoginForm(props) {
+export default function OTP() {
   const {
     register,
     handleSubmit,
     formState: { errors }
   } = useForm({ resolver: yupResolver(schema) });
 
-  const onLoginSubmit = (data) => {
+  const onOTPSubmit = (data) => {
     console.log(data);
   };
 
-  const {setName} = props;
-  const [usename, setUsername] = useState();
-  const [password, setPassword] = useState();
-  const [redirect,setRedirect] = useState();
-
-  const Login_submit = async (e: SyntheticEvent) =>{
-    e.preventDefault();
-
-    const response = await fetch('http://localhost:3000/signin',{
-      method: 'POST',
-      headers: { 'Content-type': 'application/json' },
-      credentials:'include',
-      body: JSON.stringify({
-        usename,
-        password
-      })
-    });
-    
-    setRedirect(true);
-
-  }
-
-  if(redirect){
-    return <Navigate to="/"/>
-  }
 
   return (
-<CardWrapper>
-  <CardHeader>
-    <CardHeading>Đăng nhập</CardHeading>
-  </CardHeader>
-  <CardLoginForm onSubmit={Login_submit}>
-    <CardBody>
-      <CardFieldset>
-        <CardInput id="username" placeholder="Tài khoản hoặc Số điện thoại" type="text" name="username"{...register("username")} required onChange={e => setUsername(e.target.value)}/>
-        {errors.username && <Error>{errors.username?.message}</Error>}
-      </CardFieldset>
+      <CardWrapper>
+        <CardHeader>
+          <CardHeading>Nhập mã OTP để đổi mật khẩu</CardHeading>
+        </CardHeader>
+        <CardLoginForm onSubmit={handleSubmit(onOTPSubmit)}>
+          <CardBody>
 
-      <CardFieldset>
-        <CardInput id="password" placeholder="Mật khẩu" type="password" name = "password"{...register("password")} required  onChange={e => setPassword(e.target.value)}/>
-        {errors.password && <Error>{errors.password?.message}</Error>}
-      </CardFieldset>
+          <CardFieldset>
+            <CardInput id="otp" placeholder="Mã OTP" type="text" name="otp"{...register("otp")} required/>
+            {errors.otp && <Error>{errors.otp?.message}</Error>}
+          </CardFieldset>
 
-      <CardFieldset>
-        <CardButton type="submit">Đăng nhập</CardButton>
-      </CardFieldset>
+          <CardFieldset>
+            <CardButton type="submit" href = "">Xác thực OTP </CardButton>
+          </CardFieldset>
 
-      <CardFieldset>
-        <CardMenu>
-          <li>
-            <a href="/forgot"><CardLink>Quên mật khẩu</CardLink></a>
-          </li>
-          <li><CardDoc> hoặc </CardDoc></li>
-          <li>
-            <a href="/signup"><CardLink> Đăng kí tại đây</CardLink></a>
-          </li>
-        </CardMenu>
-      </CardFieldset>
-    </CardBody>
-  </CardLoginForm> 
-</CardWrapper>
+          <CardFieldset>
+            <CardMenu>
+              <li>
+                <a href=""><CardLink> Gửi lại mã OTP</CardLink></a>
+              </li>
+              <li><CardDoc> hoặc </CardDoc></li>
+              <li>
+                <a href="/signup"><CardLink> Đăng kí tại đây</CardLink></a>
+              </li>
+            </CardMenu>
+          </CardFieldset>
+        </CardBody>
+        </CardLoginForm>
+        
+      </CardWrapper>
+
   );
 }

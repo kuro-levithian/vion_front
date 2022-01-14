@@ -235,3 +235,13 @@ export const Sale_Product = [
     
 
 ]
+
+export const Cart = []
+
+export const addCart = (id) =>{
+    const {products,Cart} = {...this.state};
+    const data = products.filter(product =>{
+        return product.id === id
+    })
+    console.log(data);
+}

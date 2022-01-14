@@ -1,10 +1,9 @@
-import React, {SyntheticEvent, useState } from 'react';
+import React, { useState } from 'react';
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import styled, { css } from "styled-components";
-import "./SignUpForm.css";
-import {Navigate} from 'react-router-dom';
+import styled from "styled-components";
+import "./CheckoutForm.css";
 
 const schema = yup.object().shape({
     username: yup
@@ -12,10 +11,6 @@ const schema = yup.object().shape({
         .required("Vui lòng nhập tên đăng nhập")
         .max(20, "Username tối đa 20 ký tự"),
     password: yup
-        .string()
-        .required("Vui lòng nhập mật khẩu")
-        .min(6, "Mật khẩu tối thiểu 6 ký tự"),
-    confirm_password:yup
         .string()
         .required("Vui lòng nhập mật khẩu")
         .min(6, "Mật khẩu tối thiểu 6 ký tự"),
@@ -72,23 +67,13 @@ const CardHeading = styled.h1`
   text-align: center;
 `;
 
-const CardLogUpForm = styled.form`
+const CardCheckoutForm = styled.form`
 display: flex;
 flex-direction: column;
 justify-content: space-evenly;
 padding: 10px;
 `
 
-const SuccessMessage = styled.div`
-font-family: 'Raleway', sans-serif;
-background-color: #3f89f8;
-font-size: 17px;
-text-align: center;
-padding: 25px;
-margin: 0 0 10px 0;
-color: white;
-display: block;
-`
 
 const CardBody = styled.div`
   padding-right: 32px;
@@ -141,7 +126,25 @@ const CardInput = styled.input`
   }
 `;
 
-
+const CardNote = styled.textarea`
+  padding: 7px 0;
+  width: 100%;
+  font-family: inherit;
+  font-size: 14px;
+  border-top: 0;
+  border-right: 0;
+  border-bottom: 1px solid #ddd;
+  border-left: 0;
+  transition: border-bottom-color 0.25s ease-in;
+  background-color: #fff;
+  max-height: 150px;
+  padding-left: 10px;
+  border-radius: 15px;
+  &:focus {
+    border-bottom-color: #FFDE59;
+    outline: 0;
+  }
+`;
 
 
 
@@ -211,80 +214,40 @@ export default function SignUpForm() {
     console.log(data);
   }
 
-  const [gender, setGender] = useState();
-  const [name, setName] = useState();
-  const [phone, setPhone] = useState();
-  const [address, setAddress] = useState();
-  const [email, setEmail] = useState();
-  const [password, setPassword] = useState();
-  const [confirm_password, setConfirm_password] = useState();
-  const [redirect,setRedirect] = useState();
-
-  const Submit = async (e: SyntheticEvent) => {
-    e.preventDefault();
-
-    await fetch('http://localhost:3000/signup', {
-      method: 'POST',
-      headers: { 'Content-type': 'application/json' },
-      body: JSON.stringify({
-        gender, name, phone, address, email, password, confirm_password
-      })
-    });
-
-    setRedirect(true);
-
-  }
-
-  if(redirect){
-    return <Navigate to="/signup"/>
-  }
-
   return (
     <CardWrapper>
         <CardHeader>
-            <CardHeading>Đăng kí</CardHeading>
+            <CardHeading>Địa chỉ nhận hàng</CardHeading>
         </CardHeader>
-        <CardLogUpForm onSubmit={Submit}>
-            {submitted ? <SuccessMessage>Bạn đã đăng ký thành công. Trở về trang chủ.</SuccessMessage> : null}
+        <CardCheckoutForm>
         <CardBody>
             <CardFieldset>
-                <CardRadio id="sex" placeholder="Anh" type="radio" name="gender"{...register("gender")} onChange={(e) => setGender(e.target.value)}/>Anh
-                <CardRadio id="sex" placeholder="Chị" type="radio" name="gender"{...register("gender")} onChange={(e) => setGender(e.target.value)}/>Chị
+                <CardRadio id="sex" placeholder="Anh" type="radio" name="gender"{...register("gender")}/>Anh
+                <CardRadio id="sex" placeholder="Chị" type="radio" name="gender"{...register("gender")}/>Chị
             </CardFieldset>
 
             <CardFieldset>
-                <CardInput id="username" placeholder="Tên đăng nhập" type="text" name="username"{...register("username")} onChange={(e) => setName(e.target.value)}/>
+                <CardInput id="username" placeholder="Họ và Tên" type="text" name="username"{...register("username")}/>
                 {errors.username && <Error>{errors.username?.message}</Error>}
             </CardFieldset>
 
             <CardFieldset>
-                <CardInput id="phone" placeholder="Số điện thoại" type="text" name="phone"{...register("phone")} onChange={(e) => setPhone(e.target.value)}/>
+                <CardInput id="phone" placeholder="Số điện thoại" type="text" name="phone"{...register("phone")}/>
                 {errors.phone && <Error>{errors.phone?.message}</Error>}
             </CardFieldset>
 
             <CardFieldset>
-                <CardInput id="address" placeholder="Địa chỉ" type="text" name="address"{...register("address")} onChange={(e) => setAddress(e.target.value)}/>
+                <CardInput id="address" placeholder="Địa chỉ nhận hàng" type="text" name="address"{...register("address")}/>
                 {errors.address && <Error>{errors.address?.message}</Error>}
+            </CardFieldset>
 
+
+            <CardFieldset>
+                <CardNote id="note" placeholder="Ghi chú" type="text" name="note" rows={5} cols={30}  />
             </CardFieldset>
 
             <CardFieldset>
-                <CardInput id="email" placeholder="Email" type="text" name="email"{...register("email")} onChange={(e) => setEmail(e.target.value)}/>
-                {errors.email && <Error>{errors.email?.message}</Error>}
-            </CardFieldset>
-
-            <CardFieldset>
-                <CardInput id="password" placeholder="Mật khẩu" type="password" name="password"{...register("password")} onChange={(e) => setPassword(e.target.value)}/>
-                {errors.password && <Error>{errors.password?.message}</Error>}
-            </CardFieldset>
-
-            <CardFieldset>
-                <CardInput id="password" placeholder="Nhập lại mật khẩu" type="password" name="confirm_password"{...register("confirm_password")} onChange={(e) => setConfirm_password(e.target.value)}/>
-                {errors.password && <Error>{errors.password?.message}</Error>}
-            </CardFieldset>
-
-            <CardFieldset>
-                <CardButton type="submit" >Đăng kí </CardButton>
+                <CardButton type="submit" >Xác nhận đơn hàng </CardButton>
             </CardFieldset>
 
             <CardFieldset>
@@ -296,7 +259,7 @@ export default function SignUpForm() {
                 </CardMenu>
             </CardFieldset>
         </CardBody>
-        </CardLogUpForm>
+        </CardCheckoutForm>
 
     </CardWrapper>
     );

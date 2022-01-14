@@ -4,20 +4,18 @@ import Header from '../component/Header'
 import Sidebar from '../component/Sidebar'
 import Good from '../component/Good'
 import Banner from '../component/Banner'
-import '../App.css';
-
 import styled from 'styled-components'
-
 
 const Container = styled.div`
 background: #eff7fa;
 color: #888;
 `
 
-const Home = () => {
+const Home = (props) => {
+  const {Product,name,setName} = props;
     return (
         <Container>
-        <Header/>
+        <Header name={name} setName={setName}/>
         <div>
         <section className="home" id="home">
           <div className="box-container">
@@ -26,7 +24,17 @@ const Home = () => {
           </div>
         </section>
         {/*product section start*/}
-          <Good/>
+        <section className="product">
+            <div className="heading">
+                <h2>Top savers to day <span>20% off</span></h2>
+                <a href="#">view all</a>
+          </div>
+          <div className='box-container'>
+              {Product.map((products)=>(
+                <Good key={products.id} Product={products}/>
+              ))}
+          </div>
+        </section>
         {/* last product section ends   */}
         </div>
         <Footer/>

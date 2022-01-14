@@ -1,15 +1,22 @@
 import React,{useState} from 'react'
 import styled from "styled-components"
-import '../App.css';
-import '../data';
-
 import logo from '../images/p-2.webp'
 import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
+import { Product } from '../data';
+import { useParams } from 'react-router-dom';
+import {Modal} from 'react-bootstrap'
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup";
+
 
 const Wrapper = styled.div`
   padding: 50px;
   display: flex;
+  justify-content:space-around;
+  flex-wrap:wrap;
+  margin:50px 0;
 `;
 
 const ImgContainer = styled.div`
@@ -17,8 +24,13 @@ const ImgContainer = styled.div`
 `;
 
 const Image = styled.img`
+  max-width:500px;
+  min-width:290px;
+  height:300px;
   width: 100%;
+  display:block;
   object-fit: cover;
+
 `;
 
 const InfoContainer = styled.div`
@@ -124,10 +136,64 @@ border-radius: 5rem;
 outline:none;
 cursor: pointer;
 border: none;
-max-width: 10rem;
-whitespace: nowrap;
-margin: 0 0.1rem;
+&:hover{
+  transform: scale(1.1);
+  transition: .2s linear;
+}
 `;
+
+const CardLogin = styled.form`
+display: flex;
+flex-direction: column;
+justify-content: space-evenly;
+padding: 10px;
+`;
+
+const Input = styled.input`
+padding: 7px 0;
+width: 100%;
+font-family: inherit;
+font-size: 14px;
+border-top: 0;
+border-right: 0;
+border-bottom: 1px solid #ddd;
+border-left: 0;
+transition: border-bottom-color 0.25s ease-in;
+background-color: #fff;
+max-height: 50px;
+padding-left: 10px;
+border-radius: 35px;
+&:focus {
+  border-bottom-color: #FFDE59;
+  outline: 0;
+}
+`;
+
+function MyVerticallyCenteredModal(props) {
+  return (
+    <Modal
+      {...props}
+      size="lg"
+      aria-labelledby="contained-modal-title-vcenter"
+      centered
+    >
+      <Modal.Header closeButton>
+        <Modal.Title id="contained-modal-title-vcenter">
+        Có lẽ quý khách chưa đăng kí để trở thành thành viên của chúng tôi
+        </Modal.Title>
+      </Modal.Header>
+      <Modal.Body>
+        <CardLogin>
+          <h5>Vui lòng cung cấp số điện thoại người nhận</h5>
+          <Input id="phone" placeholder="Số điện thoại" type="text" name="phone"/>
+        </CardLogin>
+      </Modal.Body>
+      <Modal.Footer>
+        <Button type='submit'>Tiếp tục</Button>
+      </Modal.Footer>
+    </Modal>
+  );
+}
 
 const Description = () => {
     const [count,setCount] = useState(1);
@@ -140,13 +206,18 @@ const Description = () => {
             setCount(count + 1);
         }
     }
+
+    const {id} = useParams();
+    const details = Product.find((p)=>p.id === Number(id));
+
+    const [modalShow, setModalShow]=useState(false);
     return (
         <Wrapper>
         <ImgContainer>
-          <Image src={logo} />
+          <Image src={details.image} />
         </ImgContainer>
         <InfoContainer>
-          <Title>Khoai tây</Title>
+          <Title>{details.title}</Title>
           <Desc>
             Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec
             venenatis, dolor in finibus malesuada, lectus ipsum porta nunc, at
@@ -154,14 +225,15 @@ const Description = () => {
             tristique tortor pretium ut. Curabitur elit justo, consequat id
             condimentum ac, volutpat ornare.
           </Desc>
-          <Price>$18 <span>--$14</span></Price>
+          <Price>{details.main_price} <span>--{details.sub_price}</span></Price>
           <AddContainer>
             <AmountContainer>
               <ButtonRemove action="remove" onClick={()=>handleClick("remove")}><RemoveIcon/></ButtonRemove>
               <Amount>{count}</Amount>
               <ButtonAdd action="add" onClick={()=>handleClick("add")}><AddIcon/></ButtonAdd>
             </AmountContainer>
-            <Button>Thêm</Button>
+            <Button onClick={() => setModalShow(true)}>Thêm</Button>
+            <MyVerticallyCenteredModal show={modalShow} onHide={()=>setModalShow(false)}/>
           </AddContainer>
         </InfoContainer>
       </Wrapper>
