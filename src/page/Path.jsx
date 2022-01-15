@@ -49,7 +49,7 @@ function Path() {
                 <Route path="/" element={<Home Product={Product} name={name} setName={setName}/>} />
                 <Route path="/product" element = {<ProductList/>}/>
                 <Route path="/cart" element = {<Cart cartItems={cartItems}/>}/>
-                <Route path="/product/:id" element = {<Product_Details/>}/>
+                <Route path="/product_details/:uid" element = {<Product_Details/>}/>
                 <Route path="/signup" element={<SignUp/>}/>
                 <Route path="/signin" element={<SignIn setName={setName}/>}/>
                 <Route path="/forgot" element={<ForgotPassword/>}/>

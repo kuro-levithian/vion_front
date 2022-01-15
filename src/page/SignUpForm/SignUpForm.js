@@ -220,10 +220,10 @@ export default function SignUpForm() {
   const [confirm_password, setConfirm_password] = useState();
   const [redirect,setRedirect] = useState();
 
-  const Submit = async (e: SyntheticEvent) => {
+  const Submit = async (e) => {
     e.preventDefault();
 
-    await fetch('http://localhost:3000/signup', {
+    await fetch('http://localhost:60000/api_public/list/register', {
       method: 'POST',
       headers: { 'Content-type': 'application/json' },
       body: JSON.stringify({

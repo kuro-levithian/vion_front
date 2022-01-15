@@ -195,7 +195,7 @@ function MyVerticallyCenteredModal(props) {
   );
 }
 
-const Description = () => {
+const Description = ({product}) => {
     const [count,setCount] = useState(1);
 
     const handleClick = (action) =>{
@@ -206,26 +206,19 @@ const Description = () => {
             setCount(count + 1);
         }
     }
-
-    const {id} = useParams();
-    const details = Product.find((p)=>p.id === Number(id));
-
     const [modalShow, setModalShow]=useState(false);
+    
     return (
         <Wrapper>
         <ImgContainer>
-          <Image src={details.image} />
+          <Image src={product.image_cover } />
         </ImgContainer>
         <InfoContainer>
-          <Title>{details.title}</Title>
+          <Title>{product.product_name}</Title>
           <Desc>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec
-            venenatis, dolor in finibus malesuada, lectus ipsum porta nunc, at
-            iaculis arcu nisi sed mauris. Nulla fermentum vestibulum ex, eget
-            tristique tortor pretium ut. Curabitur elit justo, consequat id
-            condimentum ac, volutpat ornare.
+          {product.description}
           </Desc>
-          <Price>{details.main_price} <span>--{details.sub_price}</span></Price>
+          <Price><span>--</span></Price>
           <AddContainer>
             <AmountContainer>
               <ButtonRemove action="remove" onClick={()=>handleClick("remove")}><RemoveIcon/></ButtonRemove>
